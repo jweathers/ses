@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
+using SES.Store;
 namespace SES.Server
 {
     public class Startup
@@ -26,6 +26,7 @@ namespace SES.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSESStore<SES.Store.MSSQL.MSSQLEventStore>(c=>new Store.MSSQL.MSSQLEventStore(Configuration.GetConnectionString("SES.MSSQLEventStore")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,9 +36,10 @@ namespace SES.Server
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
+            else
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseRouting();
 
             app.UseAuthorization();
@@ -46,6 +48,7 @@ namespace SES.Server
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

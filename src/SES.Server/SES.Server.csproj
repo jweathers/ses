@@ -6,11 +6,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SES.Store\SES.Store.csproj" />
+    <ProjectReference Include="..\SES.Core\SES.Core.csproj" />
+    <ProjectReference Include="..\SES.Store.MSSQL\SES.Store.MSSQL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="newtonsoft.json" Version="12.0.3" />
     <PackageReference Include="polly" Version="7.2.0" />
     <PackageReference Include="swashbuckle.aspnetcore" Version="4.0.1" />
+    <PackageReference Include="system.data.sqlclient" Version="4.8.0" />
   </ItemGroup>
 
 </Project>
