@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
     <PackageReference Include="newtonsoft.json" Version="12.0.3" />
   </ItemGroup>
 

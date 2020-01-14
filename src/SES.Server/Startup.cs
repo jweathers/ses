@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SES.Serialization;
 using SES.Store;
 namespace SES.Server
 {
@@ -26,7 +28,10 @@ namespace SES.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //services.AddSESJsonSerialization();
             services.AddSESStore<SES.Store.MSSQL.MSSQLEventStore>(c=>new Store.MSSQL.MSSQLEventStore(Configuration.GetConnectionString("SES.MSSQLEventStore")));
+            services.AddResponseCompression();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,12 +48,13 @@ namespace SES.Server
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
+            app.UseResponseCompression();
         }
     }
 }

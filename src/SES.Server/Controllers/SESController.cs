@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using SES.Store;
 using SES.Core;
 using System.IO;
+using SES.Serialization;
+using System.Net.Http;
 
 namespace SES.Server.Controllers
 {
@@ -32,12 +34,18 @@ namespace SES.Server.Controllers
         [HttpPost("{queueName}/publish")]
         public async Task<IActionResult> Publish([FromRoute]string queueName)
         {
-            using(var sr = new StreamReader(Request.Body))
+            using (var sr = new StreamReader(Request.Body))
             {
-                var data = await sr.ReadToEndAsync();
-                await eventStore.StoreAsync(queueName,data);
-                return Accepted();
+                await eventStore.StoreAsync(queueName,await sr.ReadToEndAsync());
             }
+            return Accepted();
+        }
+
+        [HttpGet("status")]
+        public IActionResult Status()
+        {
+            var status = new { Status = "Operational" };
+            return Ok(status);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading.Tasks;
 using Dapper;
 using SES.Core;
@@ -24,15 +25,15 @@ namespace SES.Store.MSSQL
         }
         public async Task<System.Collections.Generic.IEnumerable<SES.Core.Event>> FetchAsync(string queue, ulong startIndex, uint count)
         {
-            const string sql="SELECT TOP(@count) id,data,queuename FROM SQSEvents WHERE id>=@startIndex and queuename=@queue";
+            const string sql="SELECT TOP(@count) [index],queuename,data FROM SESEvents WITH(NOLOCK) WHERE [index]>=@startIndex and queuename=@queue";
             return await connection.QueryAsync<Event>(sql,new{startIndex=(long)startIndex,count=(int)count,queue})
                                     .ConfigureAwait(false);
         }
 
         public async Task StoreAsync(string queue, string data)
         {
-            const string sql = "INSERT INTO SQSEvents (data,queuename) VALUES (@data,@queue)";
-            await connection.ExecuteAsync(sql,new {data,queue});
+            const string sql = "INSERT INTO SESEvents (queuename,data) VALUES (@queue,@data)";
+            await connection.ExecuteAsync(sql, new {data, queue }).ConfigureAwait(false);
         }
 
         public void Dispose()

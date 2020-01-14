@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="newtonsoft.json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SES.Client\SES.Client.csproj" />
+    <ProjectReference Include="..\..\src\SES.Serialization.Json\SES.Serialization.Json.csproj" />
+    <ProjectReference Include="..\SES.Samples.Messages\SES.Samples.Messages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SampleMessages.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LanguageVersion>latest</LanguageVersion>
+  </PropertyGroup>
+
+</Project>
