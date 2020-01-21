@@ -15,27 +15,40 @@ namespace SES.Client
     public class Publisher<T>:IDisposable
     {
         private readonly PublisherOptions publisherOptions;
-        private readonly HttpClient httpClient;
+        private readonly HttpClientProxy httpClient;
         private readonly IAsyncEventSerializer serializer;
 
-        public Publisher(PublisherOptions publisherOptions,IAsyncEventSerializer serializer)
+        public Publisher(PublisherOptions publisherOptions,IAsyncEventSerializer serializer) 
+            : this(publisherOptions ?? throw new ArgumentNullException(nameof(publisherOptions)), 
+                  serializer, 
+                  publisherOptions.CreateHttpClientProxy())
+        { 
+        }
+        internal Publisher(PublisherOptions publisherOptions, IAsyncEventSerializer serializer, HttpClientProxy httpClient)
         {
-            this.publisherOptions = publisherOptions??throw new ArgumentNullException(nameof(publisherOptions));
-            this.httpClient = HttpClientFactory.NewClient(publisherOptions.ProxyEnabled, publisherOptions.Proxy);
-            this.serializer = serializer ?? throw new ArgumentOutOfRangeException(nameof(serializer), "An event serializer must be provided.");
+            this.publisherOptions = publisherOptions ?? throw new ArgumentNullException(nameof(publisherOptions));
+            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         public void Dispose()
         {
-          httpClient.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            httpClient?.Dispose();
         }
 
         public async Task<bool> PublishAsync(T @event,CancellationToken? token=null)
         {
             var uri = publisherOptions.MakePublishUri<T>();
-            var content = new StringContent(await serializer.SerializeAsync(@event), System.Text.Encoding.UTF8, serializer.ContentType);
-            var response = await httpClient.PostAsync(uri, content);
-            return response.IsSuccessStatusCode;
+            using (var content = new StringContent(await serializer.SerializeAsync(@event).ConfigureAwait(false), System.Text.Encoding.UTF8, serializer.ContentType))
+            {
+                var response = await httpClient.PostAsync(uri, content, token ?? CancellationToken.None).ConfigureAwait(false);
+                return response.IsSuccessStatusCode;
+            }
         }
     }
 }

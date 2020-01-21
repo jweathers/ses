@@ -1,6 +1,6 @@
 namespace SES.Core
 {
-    public class Event
+    public class SESEvent
     {
         public ulong Index{get;set;}
         public string Data{get;set;}

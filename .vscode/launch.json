@@ -6,28 +6,39 @@
    "compounds": [
     {
         "name": "Sample and Server",
-        "configurations": [ "SampleClient", "SESServer" ]
+        "configurations": [ "SESServer","SampleSubscriber", "SamplePublisher" ]
     }
 ],
    "configurations": [
        {
-           "name": "SampleClient",
+           "name": "SampleSubscriber",
            "type": "coreclr",
            "request": "launch",
            "preLaunchTask": "build",
-           "program": "${workspaceFolder}/src/SES.Samples.Client/bin/Debug/netcoreapp3.1/SES.Client.dll",
+           "program": "${workspaceFolder}/samples/SES.Samples.Subscriber/bin/Debug/netcoreapp3.1/SES.Samples.Subscriber.dll",
            "args": [],
-           "cwd": "${workspaceFolder}",
-           "stopAtEntry": true,
+           "cwd": "${workspaceFolder}/samples/SES.Samples.Subscriber/bin/Debug/netcoreapp3.1/",
+           "stopAtEntry": false,
            "console": "externalTerminal"
        },
+       {
+        "name": "SamplePublisher",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/samples/SES.Samples.Publisher/bin/Debug/netcoreapp3.1/SES.Samples.Publisher.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/samples/SES.Samples.Publisher/bin/Debug/netcoreapp3.1/",
+        "stopAtEntry": false,
+        "console": "externalTerminal"
+    },       
         {
             "name": "SESServer",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/SES.Server/bin/Debug/netcoreapp3.0/SES.Server.dll",
+            "program": "${workspaceFolder}/src/SES.Server/bin/Debug/netcoreapp3.1/SES.Server.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/SES.Server",
             "stopAtEntry": false,

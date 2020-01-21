@@ -16,6 +16,7 @@ namespace SES.Server.Controllers
     [Route("queues")]
 
     //    return $"{endpoint}/{typeof(T).FullName}/fetch/{startIndex}?count={options.PreferredBatchSize}";
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "No need for configure await on controllers.")]
     public class SESController : ControllerBase
     {
         private readonly IEventStore eventStore;
@@ -25,6 +26,7 @@ namespace SES.Server.Controllers
             this.eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
         [HttpGet("{queueName}/fetch/{startIndex}")]
+
         public async Task<IActionResult> Fetch([FromRoute]string queueName, [FromRoute]ulong startIndex, [FromQuery]uint count=50)
         {
             var results = await eventStore.FetchAsync(queueName,startIndex,count);

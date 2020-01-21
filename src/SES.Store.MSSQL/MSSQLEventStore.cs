@@ -23,10 +23,10 @@ namespace SES.Store.MSSQL
         public MSSQLEventStore(string connectionString):this(new SqlConnection(connectionString),true)
         {           
         }
-        public async Task<System.Collections.Generic.IEnumerable<SES.Core.Event>> FetchAsync(string queue, ulong startIndex, uint count)
+        public async Task<System.Collections.Generic.IEnumerable<SES.Core.SESEvent>> FetchAsync(string queue, ulong startIndex, uint count)
         {
             const string sql="SELECT TOP(@count) [index],queuename,data FROM SESEvents WITH(NOLOCK) WHERE [index]>=@startIndex and queuename=@queue";
-            return await connection.QueryAsync<Event>(sql,new{startIndex=(long)startIndex,count=(int)count,queue})
+            return await connection.QueryAsync<SESEvent>(sql,new{startIndex=(long)startIndex,count=(int)count,queue})
                                     .ConfigureAwait(false);
         }
 
@@ -37,6 +37,11 @@ namespace SES.Store.MSSQL
         }
 
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
         {
             if(connectionIsSelfOwned)
             {

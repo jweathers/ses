@@ -8,7 +8,7 @@ namespace SES.Serialization
 {
     public interface IAsyncEventSerializer
     {
-        Task<string> SerializeAsync<T>(T @event);
+        Task<string> SerializeAsync<T>(T sesevent);
         Task<T> DeserializeAsync<T>(string data);
         string ContentType { get; }
     }
