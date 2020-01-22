@@ -14,6 +14,37 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "build-dbup",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SES.Store.MSSQL.DBUp/SES.Store.MSSQL.DBUp.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },        
+        {
+            "label": "build_and_init",
+            "dependsOn": "build",
+            "type": "shell",
+            "command": "dotnet",
+            "args":[
+                "${workspaceFolder}\\src\\SES.Store.MSSQL.DBUp\\bin\\Debug\\netcoreapp3.1\\SES.Store.MSSQL.DBUp.dll",
+                "--verbose",
+                "true"
+            ],
+            "problemMatcher":{
+                "owner": "dbup",
+                "pattern":{
+                    "regexp":"^<DBUp - (Error)> - (.*)$",
+                    "severity": 1,
+                    "message":2
+                }
+            },
+        },
+        {
             "label": "publish",
             "command": "dotnet",
             "type": "process",

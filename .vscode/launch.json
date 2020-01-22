@@ -10,6 +10,22 @@
     }
 ],
    "configurations": [
+        {
+            "name": "Debug SES.Store.MSSQL.DBUp",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-dbup",
+            "program": "${workspaceFolder}/src/SES.Store.MSSQL.DBUp/bin/Debug/netcoreapp3.1/SES.Store.MSSQL.DBUp.dll",
+            "args": [
+                "--verbose",
+                "true",
+                "--output",
+                "${workspaceFolder}/src/SES.Store.MSSQL.DBUp/bin/Debug/netcoreapp3.1/output"
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": true,
+            "console": "externalTerminal"
+        },       
        {
            "name": "SampleSubscriber",
            "type": "coreclr",
@@ -36,7 +52,7 @@
             "name": "SESServer",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build_and_init",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/SES.Server/bin/Debug/netcoreapp3.1/SES.Server.dll",
             "args": [],

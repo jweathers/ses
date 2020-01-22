@@ -20,6 +20,7 @@ namespace SES.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureAppConfiguration(cb=>cb.AddUserSecrets<Startup>());
                     webBuilder.UseStartup<Startup>();
                 });
     }
