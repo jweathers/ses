@@ -2,6 +2,7 @@
 
 namespace SES.Client
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SubscriptionException : System.Exception
     {
         public SubscriptionException(string message, Exception innerException) : base(message, innerException)

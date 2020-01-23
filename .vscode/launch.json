@@ -19,8 +19,6 @@
             "args": [
                 "--verbose",
                 "true",
-                "--output",
-                "${workspaceFolder}/src/SES.Store.MSSQL.DBUp/bin/Debug/netcoreapp3.1/output"
             ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": true,

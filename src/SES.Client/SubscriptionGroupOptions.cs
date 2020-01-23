@@ -10,7 +10,9 @@ namespace SES.Client
             TotalSubscribersInGroup = 1;
             GroupMembershipPosition = 1;
         }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public string Name { get; set; }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]        
         public int TotalSubscribersInGroup { get; set; }
 
         private int groupMembershipPosition;

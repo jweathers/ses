@@ -1,5 +1,6 @@
 namespace SES.Core
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SESEvent
     {
         public ulong Index{get;set;}

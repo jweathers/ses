@@ -15,27 +15,31 @@ namespace SES.Client
     public class Publisher<T>:IDisposable
     {
         private readonly PublisherOptions publisherOptions;
-        private readonly HttpClientProxy httpClient;
+        private readonly IHttpClientProxy httpClient;
         private readonly IAsyncEventSerializer serializer;
 
+#pragma warning disable CA2000 //client is disposed of so no need in warning    
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage] //nothing to test here
         public Publisher(PublisherOptions publisherOptions,IAsyncEventSerializer serializer) 
             : this(publisherOptions ?? throw new ArgumentNullException(nameof(publisherOptions)), 
-                  serializer, 
+                  serializer ?? throw new ArgumentNullException(nameof(serializer)), 
                   publisherOptions.CreateHttpClientProxy())
         { 
         }
-        internal Publisher(PublisherOptions publisherOptions, IAsyncEventSerializer serializer, HttpClientProxy httpClient)
+#pragma warning restore CA2000
+        internal Publisher(PublisherOptions publisherOptions, IAsyncEventSerializer serializer, IHttpClientProxy httpClient)
         {
             this.publisherOptions = publisherOptions ?? throw new ArgumentNullException(nameof(publisherOptions));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
-
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage] //can't test as httpclient can't be mocked
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage] //can't test as httpclient can't be mocked        
         protected virtual void Dispose(bool disposing)
         {
             httpClient?.Dispose();

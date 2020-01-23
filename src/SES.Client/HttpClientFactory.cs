@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable CA2000 // Dispose objects before losing scope
+//the clientHandler is disposed of by the HttpClient
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +17,7 @@ namespace SES.Client
             {
                 UseProxy = proxyEnabled
             };
-#pragma warning restore CA2000 // Dispose objects before losing scope
+
             if (proxyEnabled)
             {
                 clientHandler.Proxy = customProxy ?? System.Net.WebRequest.GetSystemWebProxy();
@@ -28,16 +31,18 @@ namespace SES.Client
         }
         public static HttpClient NewClient(bool proxyEnabled=false, IWebProxy customProxy=null)
         {
-#pragma warning disable CA2000 // Dispose objects before losing scope
-//the clientHandler is disposed of by the HttpClient
+
             return new HttpClient(CreateHandler(proxyEnabled,customProxy),true);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static HttpClient CreateHttpClient(this PublisherOptions publisherOptions) => NewClient(publisherOptions.ProxyEnabled, publisherOptions.Proxy);
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static HttpClient CreateHttpClient(this SubscriptionOptions subscriptionOptions) => NewClient(subscriptionOptions.ProxyEnabled, subscriptionOptions.Proxy);
-
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static HttpClientProxy CreateHttpClientProxy(this PublisherOptions publisherOptions) => new HttpClientProxy(NewClient(publisherOptions.ProxyEnabled, publisherOptions.Proxy));
     }
 
 
 }
+#pragma warning restore CA2000 // Dispose objects before losing scope

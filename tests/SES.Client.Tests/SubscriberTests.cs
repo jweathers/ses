@@ -13,15 +13,15 @@ namespace SES.Client.Tests
         [Fact]
         public void ConstructorGuardsTest()
         {
-            var httpClient = Mock.Of<HttpClientProxy>();
-            var options = Mock.Of<SubscriptionOptions>();
-            var serializer = Mock.Of<IAsyncEventSerializer>();
+            var httpClient = new Mock<IHttpClientProxy>();
+            var options = new Mock<SubscriptionOptions>();
+            var serializer = new Mock<IAsyncEventSerializer>();
             Func<ulong, string, Task> onEventReceivedDelegate = (a, b) => Task.CompletedTask;
 
-            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(null, options, 1, serializer, onEventReceivedDelegate));
-            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient, null, 1, serializer, onEventReceivedDelegate));
-            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient, options, 1, null, onEventReceivedDelegate));
-            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient, options, 1, serializer, null));
+            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(null, options.Object, 1, serializer.Object, onEventReceivedDelegate));
+            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient.Object, null, 1, serializer.Object, onEventReceivedDelegate));
+            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient.Object, options.Object, 1, null, onEventReceivedDelegate));
+            Assert.Throws<ArgumentNullException>(() => new Subscriber<string>(httpClient.Object, options.Object, 1, serializer.Object, null));
         }
 
         

@@ -4,6 +4,7 @@ using System.Net;
 
 namespace SES.Client
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PublisherOptions
     {
        public string Endpoint{get;set;}

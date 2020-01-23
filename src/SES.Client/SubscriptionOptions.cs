@@ -3,6 +3,7 @@ using System.Net;
 
 namespace SES.Client
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SubscriptionOptions
     {
         public static readonly TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(60);

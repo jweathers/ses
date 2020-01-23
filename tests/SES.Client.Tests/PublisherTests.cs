@@ -35,7 +35,7 @@ namespace SES.Client.Tests
                 mockSerializer.Reset();
                 var _1 = mockSerializer.Setup(m => m.SerializeAsync(sesevent)).Returns(Task.FromResult("{}"));
                 var _2 = mockSerializer.Setup(m => m.ContentType).Returns("application/json");
-                var httpClient = new Mock<HttpClientProxy>();
+                var httpClient = new Mock<IHttpClientProxy>();
                 var _3 = httpClient
                             .Setup(c => c.PostAsync(It.IsAny<Uri>(), It.IsAny<HttpContent>(), It.IsAny<CancellationToken>()))
                             .Returns(Task.FromResult(httpResponseMessage));

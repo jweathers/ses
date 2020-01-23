@@ -8,9 +8,10 @@ using System.Net.Http.Headers;
 
 namespace SES.Client
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal class Subscriber<T> : ISubscriber
     {
-        private readonly HttpClientProxy httpClient;
+        private readonly IHttpClientProxy httpClient;
         private readonly SubscriptionOptions subscriptionOptions;
         private readonly ulong startindex;
         private readonly IAsyncEventSerializer serializer;
@@ -18,7 +19,7 @@ namespace SES.Client
         private readonly Action<ulong, Exception> onException;
         private readonly Random rng;
         private readonly Stopwatch stopwatch;
-        public Subscriber(HttpClientProxy httpClient, SubscriptionOptions subscriptionOptions, ulong startindex, IAsyncEventSerializer serializer, Func<ulong, T, Task> onEventReceived, Action<ulong, Exception> onException = null)
+        public Subscriber(IHttpClientProxy httpClient, SubscriptionOptions subscriptionOptions, ulong startindex, IAsyncEventSerializer serializer, Func<ulong, T, Task> onEventReceived, Action<ulong, Exception> onException = null)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.subscriptionOptions = subscriptionOptions ?? throw new ArgumentNullException(nameof(subscriptionOptions));
@@ -104,7 +105,7 @@ namespace SES.Client
             }
             return events;
         }
-
+        
         private TimeSpan CalculateWaitTime(TimeSpan processingTime)
         {
             var nextPollDelayMS = Math.Max((subscriptionOptions.PollingInterval - processingTime).TotalMilliseconds, 0);

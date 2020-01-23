@@ -8,45 +8,49 @@ using System.Threading.Tasks;
 
 namespace SES.Client
 {
+    internal interface IHttpClientProxy
+    {
+        HttpRequestHeaders DefaultRequestHeaders { get; }
+
+        void Dispose();
+        Task<string> GetStringAsync(Uri uri);
+        Task<HttpResponseMessage> PostAsync(Uri uri, HttpContent content, CancellationToken? cancellationToken = null);
+    }
 
     /// <summary>
     /// This class provides support for testability as HttpClient isn't mockable
     /// </summary>
-    internal class HttpClientProxy:IDisposable
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage] //nothing to really test here
+    internal class HttpClientProxy : IDisposable, IHttpClientProxy
     {
         private readonly HttpClient httpClient;
+        private readonly bool shouldDisposeClient;
 
-        /// <summary>
-        /// this constructor is provided solely for the purposes of testing and should not be used
-        /// </summary>
-        internal HttpClientProxy()
-        {
-
-        }
-        public HttpClientProxy(HttpClient httpClient)
+        public HttpClientProxy(HttpClient httpClient, bool shouldDisposeClient = true)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.shouldDisposeClient = shouldDisposeClient;
         }
-        private void EnsureHttpClientExists()
-        {
-            if (this.httpClient == null) throw new InvalidOperationException("httpClient is null so impermissible constructor was used to create this instance.");
-        }
+
         public virtual Task<HttpResponseMessage> PostAsync(Uri uri, HttpContent content, CancellationToken? cancellationToken = null)
         {
-            EnsureHttpClientExists();
             return httpClient.PostAsync(uri, content, cancellationToken ?? CancellationToken.None);
         }
 
-        public virtual Task<string> GetStringAsync(Uri uri)
+            public virtual Task<string> GetStringAsync(Uri uri)
         {
-            EnsureHttpClientExists();
             return httpClient.GetStringAsync(uri);
         }
         public HttpRequestHeaders DefaultRequestHeaders => httpClient.DefaultRequestHeaders;
+
         protected virtual void Dispose(bool disposing)
         {
-            httpClient?.Dispose();
+            if (shouldDisposeClient)
+            {
+                httpClient?.Dispose();
+            }
         }
+        
         public void Dispose()
         {
             Dispose(true);

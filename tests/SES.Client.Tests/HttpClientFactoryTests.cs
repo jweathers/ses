@@ -32,6 +32,10 @@ namespace SES.Client.Tests
                 Assert.Equal(customProxy, i3.Proxy);
                 Assert.True(i3.AutomaticDecompression.HasFlag(System.Net.DecompressionMethods.GZip) && i3.AutomaticDecompression.HasFlag(System.Net.DecompressionMethods.Deflate));
             }
+            using (var i4 = HttpClientFactory.NewClient(true, customProxy))
+            {
+                Assert.NotNull(i4);
+            }            
         }
     }
 }

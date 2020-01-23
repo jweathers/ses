@@ -44,6 +44,7 @@ namespace SES.Client
         {
             splits.Add(splitName, DateTimeOffset.Now - (startTime ?? DateTimeOffset.Now));
         }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Split()
         {
             Split((splits.Count + 1).ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
@@ -71,6 +72,7 @@ namespace SES.Client
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public TimeSpan SplitTime(int split) => SplitTime(split.ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
         public TimeSpan SplitTime(string splitName)
         {
